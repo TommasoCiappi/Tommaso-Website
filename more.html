@@ -334,10 +334,37 @@
         updateScene(step);
       }
     }, { passive: false });
+    let touchStartY = 0;
+
+window.addEventListener("touchstart", (e) => {
+  touchStartY = e.touches[0].clientY;
+}, { passive: true });
+
+window.addEventListener("touchend", (e) => {
+  const touchEndY = e.changedTouches[0].clientY;
+  const deltaY = touchStartY - touchEndY;
+
+  if (Math.abs(deltaY) < 40) return; // evita tocchi piccoli
+
+  if (step === 2) {
+    handleStafferScroll(deltaY);
+    return;
+  }
+
+  if (deltaY > 0 && step < scenes.length - 1) {
+    step++;
+    updateScene(step);
+  } else if (deltaY < 0 && step > 0) {
+    step--;
+    updateScene(step);
+  }
+});
+
   </script>
 
 </body>
 </html>
+
 
 
 
